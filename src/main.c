@@ -1,11 +1,15 @@
 #include "chunks.h"
-#include "soft_uart.h"
+#include "suart/suart.h"
+
+
 
 int main()
 {
-	SUART_init();
-	SUART_init_stdio();
-	DDRB = DDRB | _BV(PB3);
+	SUART_tx_init();
+	SUART_init_tx_stdio();
+
+	//SUART_rx_init();
+
 	OSCCAL += 7;
 
 	//################################
@@ -13,17 +17,17 @@ int main()
 	ADCSRA	= _BV(ADEN) | _BV(ADPS2) | _BV(ADPS1) | _BV(ADPS0);						// 128 предделитель
 	//################################
 
-
 	sei();
 
 	while(1)
 	{
-		ADCSRA = ADCSRA | _BV(ADSC);
+		_delay_ms(5);
+		ADCSRA			= ADCSRA | _BV(ADSC);
 		loop_until_bit_is_set(ADCSRA, ADIF);
-		uint16_t val	= (ADCW - 272.9) / 1.075;
-		printf("temp = %d°C\n", val);
+		//uint8_t byte	= SUART_read_byte();
+		//printf("byte = %d\n\n\n", byte);
+		printf("ADC = %d\n", ADCW);
 		_delay_ms(100);
-		PORTB = PORTB ^ _BV(PB3);
 	}
 
 	return EXIT_SUCCESS;
