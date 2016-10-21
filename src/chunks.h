@@ -1,8 +1,8 @@
 #ifndef UART_ATTINY_SRC_CHUNKS_H_
 	#define UART_ATTINY_SRC_CHUNKS_H_
 
-	#ifndef FCPU
-		#define F_CPU 1000000UL
+	#ifndef F_CPU
+		#define F_CPU 4000000UL
 	#endif
 
 	#ifndef DEVICE
@@ -16,6 +16,7 @@
 	#include <avr/io.h>
 	#include <stdlib.h>
 	#include <stdint.h>
+	#include <stdio.h>
 	#include <util/delay.h>
 	#include <avr/interrupt.h>
 

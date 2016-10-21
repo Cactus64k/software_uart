@@ -1,14 +1,13 @@
-TARG		= uart_attiny
+TARG		= suart
 CC			= avr-gcc
 OBJCOPY		= avr-objcopy
 SRCS		= $(shell find . -name '*.c' -printf './%P ')
-PROGR		= usbasp
+PROGR		= usbtiny
 MCU			= attiny85
-F_CPU		= 1000000UL
 LIBS		= 
 OBJS		= $(SRCS:.c=.o)
 
-CFLAGS		= -mmcu=$(MCU) -std=c99 -Wall -Os -DF_CPU=$(F_CPU) -DDEVICE=$(MCU)
+CFLAGS		= -mmcu=$(MCU) -std=c99 -Wall -O3
 LDFLAGS		= -mmcu=$(MCU) -Wall -Os -Werror 
  
 all: $(TARG) load
@@ -24,7 +23,7 @@ clean:
 	rm -f *.elf *.bin *.hex  $(OBJS) *.map
 
 load:
-	avrdude -c $(PROGR) -p $(MCU) -U flash:w:$(TARG).hex -D
+	avrdude -c $(PROGR) -p $(MCU) -U flash:w:$(TARG).hex
 
 erase:
 	avrdude -c $(PROGR) -p $(MCU) -eu
