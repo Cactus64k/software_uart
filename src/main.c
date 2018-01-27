@@ -4,11 +4,10 @@
 int main()
 {
 	SUART_tx_init();
-	//SUART_rx_init();
 	SUART_init_tx_stdio();
 
 	//################################
-	ADMUX	= _BV(REFS1) | _BV(MUX3) | _BV(MUX2) | _BV(MUX1) | _BV(MUX0);			// температурный датчик, внутренний источник на 1,1 вольт
+	ADMUX	= _BV(MUX0); 
 
 	ADCSRA	= _BV(ADEN) | _BV(ADPS2) | _BV(ADPS1) | _BV(ADPS0);						// 128 предделитель
 	//################################
@@ -19,10 +18,10 @@ int main()
 	{
 		ADCSRA = ADCSRA | _BV(ADSC);
 		loop_until_bit_is_set(ADCSRA, ADIF);
+		double volts	= (float)ADCW * 5.f / 1023.f;
+		double temp		= volts * 100 - 273;
 
-		//uint8_t byte	= SUART_read_byte();
-		//printf("byte = %d\n", byte);
-		printf("ADCW = %d\n", ADCW);
+		printf("ADCW = %.2f (%d) Привет привет Тестирую уарт как он работает\n", temp, ADCW);
 		_delay_ms(1000);
 	}
 

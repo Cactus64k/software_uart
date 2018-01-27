@@ -1,30 +1,31 @@
 #include "suart.h"
 
-#ifdef ENABLE_TRANSMITTER
-
 static uint16_t tx_frame		= 0;
 static volatile uint8_t tx_pos	= 0;
+#define PACKAGE_SIZE 10
 
 ISR(TIMER0_COMPA_vect)
 {
-	if(tx_frame & (1 << (10-tx_pos)))
+	if(tx_frame & ((uint16_t)1 << tx_pos))
 		TX_PORT = TX_PORT | _BV(TX_PIN);
 	else
 		TX_PORT = TX_PORT & ~_BV(TX_PIN);
 
-	if(tx_pos == 0)
-		TIMSK	= TIMSK &~ _BV(OCIE0A);			// отключаем прерывание
-	else
-		tx_pos--;
+	tx_pos++;
 }
 
 void SUART_send_byte(uint8_t byte)
 {
 	tx_frame	= ((uint16_t)byte << 1) | (0xFFFF << 9);		// формируем старт бит и стоп бит
-	tx_pos		= 10;
+	tx_pos		= 0;
+	TCNT0		= 0;
 
-	TIMSK	= TIMSK | _BV(OCIE0A);		// прерывание на совпадение
-	while(tx_pos != 0);
+
+	TIMSK		= TIMSK | _BV(OCIE0A);		// прерывание на совпадение
+
+	while(tx_pos < PACKAGE_SIZE);
+	
+	TIMSK		= TIMSK &~ _BV(OCIE0A);
 }
 
 int	stdio_put_char(char c, FILE* f)
@@ -59,4 +60,3 @@ void SUART_send_string(char* string)
 
 }
 
-#endif /* ENABLE_TRANSMITTER */

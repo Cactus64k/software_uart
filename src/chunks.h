@@ -2,7 +2,8 @@
 	#define UART_ATTINY_SRC_CHUNKS_H_
 
 	#ifndef F_CPU
-		#define F_CPU 4000000UL
+		//#define F_CPU 1843200UL
+		#define F_CPU 3686400UL
 	#endif
 
 	#ifndef DEVICE

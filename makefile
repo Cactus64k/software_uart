@@ -4,13 +4,13 @@ OBJCOPY		= avr-objcopy
 SRCS		= $(shell find . -name '*.c' -printf './%P ')
 PROGR		= usbtiny
 MCU			= attiny85
-LIBS		= 
+LIBS		= -lprintf_flt
 OBJS		= $(SRCS:.c=.o)
 
 CFLAGS		= -mmcu=$(MCU) -std=c99 -Wall -O3
-LDFLAGS		= -mmcu=$(MCU) -Wall -Os -Werror 
+LDFLAGS		= -mmcu=$(MCU) -Wall -Os -Werror -u vfprintf
  
-all: $(TARG) load
+all: clean $(TARG) load
  
 $(TARG): $(OBJS)
 	$(CC) $(LDFLAGS) $(LIBS) -o $@.elf $(OBJS)
