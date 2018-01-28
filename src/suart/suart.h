@@ -8,8 +8,7 @@
 	#endif
 
 	#ifndef BAUD
-		//#define BAUD 9600UL
-		#define BAUD 19200UL
+		#define BAUD 9600UL
 	#endif
 
 	#define TX_PORT	PORTB
@@ -28,27 +27,22 @@
 	#define SUART_PRESCALER_1 ((F_CPU/(BAUD * 1UL)))
 	#if SUART_PRESCALER_1 < 0xFF
 		#define SUART_TIMER_PRESCALER 1
-		#warning "Set 1 prescaller"
 	#else
 		#define SUART_PRESCALER_8 ((F_CPU/(BAUD * 8UL)))
 		#if SUART_PRESCALER_8 < 0xFF
 			#define SUART_TIMER_PRESCALER 8
-			#warning "Set 8 prescaller"
 		#else
 			#define SUART_PRESCALER_64 ((F_CPU/(BAUD * 64UL)))
 			#if SUART_PRESCALER_64 < 0xFF
 				#define SUART_TIMER_PRESCALER 64
-				#warning "Set 64 prescaller"
 			#else
 				#define SUART_PRESCALER_256 ((F_CPU/(BAUD * 256UL)))
 				#if SUART_PRESCALER_256 < 0xFF
 					#define SUART_SUART_TIMER_PRESCALER 256
-					#warning "Set 256 prescaller"
 				#else
 					#define SUART_PRESCALER_1024 ((F_CPU/(BAUD * 1024UL)))
 					#if SUART_PRESCALER_1024 < 0xFF
 						#define SUART_TIMER_PRESCALER 1024
-						#warning "Set 1024 prescaller"
 					#else
 						#error "Failed to calculate timer prescaler"
 					#endif	/* PRESCALER_1024 */
