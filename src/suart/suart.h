@@ -23,6 +23,7 @@
 	#include <stdint.h>
 	#include <avr/interrupt.h>
 	#include <stdbool.h>
+	#include <avr/sleep.h>
 
 	#define SUART_PRESCALER_1 ((F_CPU/(BAUD * 1UL)))
 	#if SUART_PRESCALER_1 < 0xFF

@@ -16,16 +16,23 @@ ISR(TIMER0_COMPA_vect)
 
 void SUART_send_byte(uint8_t byte)
 {
+	set_sleep_mode(SLEEP_MODE_IDLE);
+	sleep_enable();
+
 	tx_frame	= ((uint16_t)byte << 1) | (0xFFFF << 9);		// формируем старт бит и стоп бит
 	tx_pos		= 0;
 	TCNT0		= 0;
-
-
 	TIMSK		= TIMSK | _BV(OCIE0A);		// прерывание на совпадение
 
-	while(tx_pos < PACKAGE_SIZE);
+	while(tx_pos < PACKAGE_SIZE)
+	{
+		sleep_bod_disable();
+		sleep_cpu();
+	}
 	
 	TIMSK		= TIMSK &~ _BV(OCIE0A);
+
+	sleep_disable();
 }
 
 int	stdio_put_char(char c, FILE* f)
